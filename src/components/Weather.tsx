@@ -41,7 +41,7 @@ export default function Weather() {
 
   useEffect(() => {
     async function getLocation() {
-      const res = await axios.get("http://ip-api.com/json");
+      const res = await axios.get("https://ip-api.com/json");
       if (res.status === 200){
         setUserLocation(res.data)
       }
