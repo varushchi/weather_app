@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import Map from './Map';
+import HourWeather from './HourWeather';
+import DayButtons from './DayButtons';
 
 export default function Weather() {
 
@@ -29,6 +31,7 @@ export default function Weather() {
       time: [string]
       temperature_2m: [number]
       precipitation_probability: [number]
+      rain: [number]
       snowfall: [number]
       cloud_cover: [number]
       wind_speed_10m: [number]
@@ -44,7 +47,7 @@ export default function Weather() {
   const [position, setPosition] = useState<{lat: number, lng: number}>({lat: 55.751, lng: 37.617})
   const [weather, setWeather] = useState<undefined | WeatherData>()
   const [geoData, setGeoData] = useState<undefined | GeoData>()
-  const [showMap, setShowMap] = useState(false)
+  const [showMap, setShowMap] = useState(true)
 
   useEffect(() => {
     async function getWeather(){
@@ -72,12 +75,39 @@ export default function Weather() {
     
   }, [position])
 
+  const hourWeatherElems: JSX.Element[] = []
+  const maxTemp: string[] = []
+  const minTemp: string[] = []
+  let tempArr: number[] = []
+  if (weather && weather.hourly)
+  {
+    for (let i = 0; i < weather.hourly.time.length; i++){
+      const newElem = 
+        <HourWeather
+          key = {weather.hourly.time[i]}
+          time={weather.hourly.time[i]}
+          temperature_2m={weather.hourly.temperature_2m[i]}
+          wind_speed_10m={weather.hourly.wind_speed_10m[i]}
+          rain={weather.hourly.rain[i]}
+        />
+      hourWeatherElems.push(newElem)
+      tempArr.push(weather.hourly.temperature_2m[i])
+      if ((i + 1) % 24 === 0){
+        maxTemp.push(Math.max.apply(null,tempArr).toFixed(0))
+        minTemp.push(Math.min.apply(null,tempArr).toFixed(0))
+        tempArr = []
+      }
+        
+    }
+  }
+
   return (
     <div>
       {geoData && `Temperature in ${geoData.countryName}, ${geoData.city} is: `}
-      {geoData?.city && weather && `${weather.current.temperature_2m} ${weather.current_units.temperature_2m}`}
+      {geoData?.city && weather && `${weather.current.temperature_2m}${weather.current_units.temperature_2m}`}
       <button onClick={() => setShowMap(!showMap)}>set location</button>
       {showMap && <Map center={position} handlePosition = {(position: {lat: number, lng: number}) => setPosition(position)}/>}
+      {weather && <DayButtons data={hourWeatherElems} maxTemp = {maxTemp} minTemp = {minTemp}/>}
     </div>
   )
 }
