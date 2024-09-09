@@ -3,6 +3,9 @@ button{
   font-weight: inherit;
 }
 
-.map-button{
-  margin-left:100px;
+header{
+  width: 835px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

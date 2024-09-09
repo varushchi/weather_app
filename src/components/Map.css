@@ -1,9 +1,10 @@
 .Map
 {
-  width: 600px;
-  height: 500px;
-  position: relative;
+  width: 830px;
+  height: 700px;
+  position: absolute;
   margin-top: 30px;
+  border: 5px solid black;
 }
 
 .leaflet-container

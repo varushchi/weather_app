@@ -48,7 +48,7 @@ export default function Weather() {
   const [position, setPosition] = useState<{lat: number, lng: number}>({lat: 55.751, lng: 37.617})
   const [weather, setWeather] = useState<undefined | WeatherData>()
   const [geoData, setGeoData] = useState<undefined | GeoData>()
-  const [showMap, setShowMap] = useState(true)
+  const [showMap, setShowMap] = useState(false)
 
   useEffect(() => {
     async function getWeather(){
@@ -104,11 +104,14 @@ export default function Weather() {
 
   return (
     <div className='Weather'>
-      {geoData && `Temperature in ${geoData.countryName}, ${geoData.city} is: `}
-      {geoData?.city && weather && `${weather.current.temperature_2m}${weather.current_units.temperature_2m}`}
-      <button className='map-button' onClick={() => setShowMap(!showMap)}>
-        {showMap ? 'Hide map' : 'Set location'}
-      </button>
+      <header>
+        {geoData && `Temperature in ${geoData.countryName}, ${geoData.city} is: `}
+        {geoData?.city && weather && `${weather.current.temperature_2m}${weather.current_units.temperature_2m}`}
+        <button className='map-button' onClick={() => setShowMap(!showMap)}>
+          {showMap ? 'Hide map' : 'Set location'}
+        </button>
+      </header>
+      
       {showMap && <Map center={position} handlePosition = {(position: {lat: number, lng: number}) => setPosition(position)}/>}
       {weather && <DayButtons data={hourWeatherElems} maxTemp = {maxTemp} minTemp = {minTemp}/>}
     </div>
