@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import './DayButtons.css'
+import cloudy from '../svgs/partially cloudy.svg'
 
 export default function DayButtons(props: {data:JSX.Element[], maxTemp: string[], minTemp: string[]}) {
 
@@ -32,9 +34,16 @@ export default function DayButtons(props: {data:JSX.Element[], maxTemp: string[]
 
   const currentDate = new Date()
   const dayButtons = [
-    <div key={currentDate.toLocaleDateString()}>
-      <button className='0' onClick={(e) => handleClick(e)}>{currentDate.toLocaleDateString().split('.').slice(0,2).join('.')} (Today)</button>
-      <span>{props.maxTemp[0]}°C/{props.minTemp[0]}°C</span>
+    <div key={currentDate.toLocaleDateString()} className='DayButton'>
+      <button className='0' onClick={(e) => handleClick(e)}>
+          <span className='0'>
+            {currentDate.toLocaleDateString().split('.').slice(0,2).join('.')} (Today)
+          </span>
+          <img  src={cloudy} className='0'/>
+          <span className='0'>
+            {props.maxTemp[0]}°C/{props.minTemp[0]}°C
+          </span>
+        </button>
       {selectDay[0] && dataForDays[0]}
     </div>
     ]
@@ -42,9 +51,16 @@ export default function DayButtons(props: {data:JSX.Element[], maxTemp: string[]
   {
     currentDate.setDate(currentDate.getDate() + 1)
     dayButtons.push(
-      <div key={currentDate.toLocaleDateString()}>
-        <button className={`${i+1}`} onClick={(e) => handleClick(e)}>{currentDate.toLocaleDateString().split('.').slice(0,2).join('.')}</button>
-        <span>{props.maxTemp[i+1]}°C/{props.minTemp[i+1]}°C</span>
+      <div key={currentDate.toLocaleDateString()} className='DayButton'>
+        <button className={`${i+1}`} onClick={(e) => handleClick(e)}>
+          <span className={`${i+1}`}>
+            {currentDate.toLocaleDateString().split('.').slice(0,2).join('.')}
+          </span>
+          <img  src={cloudy} className={`${i+1}`}/>
+          <span className={`${i+1}`}>
+            {props.maxTemp[i+1]}°C/{props.minTemp[i+1]}°C
+          </span>
+        </button>
         {selectDay[i+1] && dataForDays[i+1]}
       </div>
     

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Map from './Map';
 import HourWeather from './HourWeather';
 import DayButtons from './DayButtons';
+import './Weather.css'
 
 export default function Weather() {
 
@@ -102,10 +103,12 @@ export default function Weather() {
   }
 
   return (
-    <div>
+    <div className='Weather'>
       {geoData && `Temperature in ${geoData.countryName}, ${geoData.city} is: `}
       {geoData?.city && weather && `${weather.current.temperature_2m}${weather.current_units.temperature_2m}`}
-      <button onClick={() => setShowMap(!showMap)}>set location</button>
+      <button className='map-button' onClick={() => setShowMap(!showMap)}>
+        {showMap ? 'Hide map' : 'Set location'}
+      </button>
       {showMap && <Map center={position} handlePosition = {(position: {lat: number, lng: number}) => setPosition(position)}/>}
       {weather && <DayButtons data={hourWeatherElems} maxTemp = {maxTemp} minTemp = {minTemp}/>}
     </div>
