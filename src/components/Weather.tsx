@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import Map from './Map';
-import HourWeather from './HourWeather';
 import DayButtons from './DayButtons';
 import './Weather.css'
 
@@ -76,27 +75,29 @@ export default function Weather() {
     
   }, [position])
 
-  const hourWeatherElems: JSX.Element[] = []
   const maxTemp: string[] = []
   const minTemp: string[] = []
-  let tempArr: number[] = []
+  let tempTempratureArr: number[] = []
+  let tempWindArr: number[] = []
+  let tempRainArr: number[] = []
+  const Temperature: number[][] = []
+  const Wind: number[][] = []
+  const Rain: number[][] = []
   if (weather && weather.hourly)
   {
     for (let i = 0; i < weather.hourly.time.length; i++){
-      const newElem = 
-        <HourWeather
-          key = {weather.hourly.time[i]}
-          time={weather.hourly.time[i]}
-          temperature_2m={weather.hourly.temperature_2m[i]}
-          wind_speed_10m={weather.hourly.wind_speed_10m[i]}
-          rain={weather.hourly.rain[i]}
-        />
-      hourWeatherElems.push(newElem)
-      tempArr.push(weather.hourly.temperature_2m[i])
+      tempTempratureArr.push(weather.hourly.temperature_2m[i])
+      tempWindArr.push(weather.hourly.wind_speed_10m[i])
+      tempRainArr.push(weather.hourly.rain[i])
       if ((i + 1) % 24 === 0){
-        maxTemp.push(Math.max.apply(null,tempArr).toFixed(0))
-        minTemp.push(Math.min.apply(null,tempArr).toFixed(0))
-        tempArr = []
+        maxTemp.push(Math.max.apply(null,tempTempratureArr).toFixed(0))
+        minTemp.push(Math.min.apply(null,tempTempratureArr).toFixed(0))
+        Temperature.push(tempTempratureArr)
+        Wind.push(tempWindArr)
+        Rain.push(tempRainArr)
+        tempTempratureArr = []
+        tempWindArr = []
+        tempRainArr = []
       }
         
     }
@@ -113,7 +114,7 @@ export default function Weather() {
       </header>
       
       {showMap && <Map center={position} handlePosition = {(position: {lat: number, lng: number}) => setPosition(position)}/>}
-      {weather && <DayButtons data={hourWeatherElems} maxTemp = {maxTemp} minTemp = {minTemp}/>}
+      {weather && <DayButtons Temp = {Temperature} Wind = {Wind} Rain = {Rain} maxTemp = {maxTemp} minTemp = {minTemp}/>}
     </div>
   )
 }

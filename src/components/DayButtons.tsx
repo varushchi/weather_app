@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
 import './DayButtons.css'
+import HourWeather from './HourWeather'
 import cloudy from '../svgs/partially cloudy.svg'
 
-export default function DayButtons(props: {data:JSX.Element[], maxTemp: string[], minTemp: string[]}) {
+interface Props{
+  Temp: number[][]
+  Wind: number[][]
+  Rain: number[][]
+  maxTemp: string[]
+  minTemp: string[]
+}
 
-  const dataForDays = [
-    props.data.slice(0*24, 24*0 + 24),
-    props.data.slice(1*24, 24*1 + 24),
-    props.data.slice(2*24, 24*2 + 24),
-    props.data.slice(3*24, 24*3 + 24),
-    props.data.slice(4*24, 24*4 + 24),
-    props.data.slice(5*24, 24*5 + 24),
-    props.data.slice(6*24, 24*6 + 24)
-  ]
+export default function DayButtons(props: Props) {
 
   const [selectDay, setSelectDay] = useState([
     false, false, false, false, false, false, false,
@@ -32,6 +31,7 @@ export default function DayButtons(props: {data:JSX.Element[], maxTemp: string[]
     })
   }
 
+
   const currentDate = new Date()
   const dayButtons = [
     <div key={currentDate.toLocaleDateString()} className='DayButton'>
@@ -43,8 +43,8 @@ export default function DayButtons(props: {data:JSX.Element[], maxTemp: string[]
           <span className='0'>
             {props.maxTemp[0]}°C/{props.minTemp[0]}°C
           </span>
-        </button>
-      {selectDay[0] && dataForDays[0]}
+      </button>
+      {selectDay[0] && <HourWeather Temp={props.Temp[0]} Wind = {props.Wind[0]} Rain = {props.Rain[0]}/>}
     </div>
     ]
   for (let i = 0; i < 6; i++)
@@ -61,9 +61,8 @@ export default function DayButtons(props: {data:JSX.Element[], maxTemp: string[]
             {props.maxTemp[i+1]}°C/{props.minTemp[i+1]}°C
           </span>
         </button>
-        {selectDay[i+1] && dataForDays[i+1]}
+        {selectDay[i+1] && <HourWeather Temp={props.Temp[i+1]} Wind = {props.Wind[i+1]} Rain = {props.Rain[i+1]}/>}
       </div>
-    
     )
   }
 
